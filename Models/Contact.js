@@ -9,4 +9,4 @@ const contactSchema = new mongoose.Schema({
     user:{type:mongoose.Schema.Types.ObjectId}
 })
 
-export const Contact = mongoose.model('Contact',contactSchema);
+export const Contact = mongoose.model('Contact',contactSchema);                                                                                                                    

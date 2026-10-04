@@ -1,13 +1,14 @@
 import { Contact } from "../Models/Contact.js";
 
 // get all contact
-export const getAllContact = async (req,res)=> {
-    const userContact = await Contact.find();
+export const getAllContact = async (req, res) => {
+  const userContact = await Contact.find();
 
-    if(!userContact) return res.json({message:"No Contact Exist",success:false})
+  if (!userContact)
+    return res.json({ message: "No Contact Exist", success: false });
 
-        res.json({message:"All Contact Fatched",userContact})
-}
+  res.json({ message: "All Contact Fatched", userContact });
+};
 
 //create new Contact
 export const newContact = async (req, res) => {
@@ -21,6 +22,7 @@ export const newContact = async (req, res) => {
     email,
     phone,
     type,
+    user:req.user
   });
 
   res.json({
@@ -30,5 +32,65 @@ export const newContact = async (req, res) => {
   });
 };
 
-//get contact by id
+// update contact by id
+export const updateContactById = async (req, res) => {
+  const id = req.params.id;
+  const { name, email, phone, type } = req.body;
 
+  let updatedContact = await Contact.findByIdAndUpdate(
+    id,
+    {
+      name,
+      email,
+      phone,
+      type,
+    },
+    { returnDocument:"after" },
+  );
+
+  if (!updatedContact)
+    return res.json({ message: "No Contact Exist", success: false });
+  else {
+    res.json({
+      message: "Contact Updated Successfully...!",
+      updatedContact,
+      success: true,
+    });
+  }
+};
+
+// delete contact by id
+export const deleteContactById = async (req, res) => {
+  const id = req.params.id;
+
+  let deleteContact = await Contact.findByIdAndDelete(id);
+
+  if (!deleteContact)
+    return res.json({ message: "No Contact Exist", success: false });
+  else {
+    res.json({
+      message: "Contact Deleted Successfully...!",
+      success: true,
+    });
+  }
+};
+
+//get contact by id
+export const getContactByid = async (req, res) => {
+  const id = req.params.id;
+
+  const userContact = await Contact.findById(id);
+  if (!userContact)
+    return res.json({ message: "No Contact Find", success: false });
+  res.json({ message: "Contact Fetched", userContact, success: true });
+};
+
+// get contact by user id
+export const getContactByUserid = async (req, res) => {
+  const id = req.params.id;
+
+  const userContact = await Contact.find({user:id});
+  if (!userContact)
+    return res.json({ message: "No Contact Find", success: false });
+  res.json({ message: "User Specific Contact Fetched", userContact, success: true });
+};
