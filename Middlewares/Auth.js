@@ -6,7 +6,7 @@ export const isAuthenticated = async (req, res, next) => {
   // console.log("Checking token = ",token);
   if (!token) return res.json({ message: "Login first" });
 
-  const decoded = jwt.verify(token, "!@#$%^&*()");
+  const decoded = jwt.verify(token, process.env.JWT);
   const id = decoded.userId;
 
   let user = await User.findById(id);
